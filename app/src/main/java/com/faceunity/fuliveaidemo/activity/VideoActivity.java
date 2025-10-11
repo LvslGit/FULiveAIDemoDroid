@@ -46,10 +46,14 @@ public class VideoActivity extends BaseGlActivity implements OnGlRendererListene
 
     //region Activity生命周期绑定
     private Boolean isActivityPause = false;
+    
+    int level = 2;
+    public static String BUNDLE_FACE_BEAUTIFICATION = "graphics" + File.separator + "face_beautification.bundle";
 
     @Override
     protected void onResume() {
         super.onResume();
+        level = FuDeviceUtils.judgeDeviceLevel();
         mVideoRenderer.onResume();
         if (isActivityPause) {
             mPlayView.setVisibility(View.VISIBLE);
@@ -145,6 +149,7 @@ public class VideoActivity extends BaseGlActivity implements OnGlRendererListene
 
     @Override
     public void onRenderAfter(FURenderOutputData fuRenderOutputData, FURenderFrameData fuRenderFrameData) {
+        FURenderKit.getInstance().enableWarpAntiAlias(BUNDLE_FACE_BEAUTIFICATION, level > FuDeviceUtils.DEVICE_LEVEL_ONE);
         mVideoWidth = fuRenderOutputData.getTexture().getWidth();
         mVideoHeight = fuRenderOutputData.getTexture().getHeight();
 
